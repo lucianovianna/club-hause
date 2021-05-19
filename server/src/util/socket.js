@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 
 export default class SocketServer {
-  #io; // variavel privada
+  #io;
 
   constructor({ port }) {
     this.port = port;
@@ -11,8 +11,8 @@ export default class SocketServer {
   async start() {
     const server = http.createServer((request, response) => {
       response.writeHead(200, {
-        "Acess-Control-Allow-Origin": "*",
-        "Acess-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       });
 
       response.end("hey there");
@@ -26,7 +26,7 @@ export default class SocketServer {
     });
 
     const room = this.#io.of("/room");
-    server.on("connection", (socket) => {
+    room.on("connection", (socket) => {
       socket.emit("userConnection", "socket id se conectou " + socket.id);
 
       socket.on("joinRoom", (dados) => {

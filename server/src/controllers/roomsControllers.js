@@ -1,4 +1,5 @@
 import Attendee from "../entities/attendee.js";
+import Room from "../entities/room.js";
 import { constants } from "../util/constants.js";
 
 export default class RoomsController {
@@ -20,8 +21,50 @@ export default class RoomsController {
 
     const updatedUserData = this.#updateGlobalUserData(user.id, user, roomId);
 
-    // console.log({ updatedUserData });
+    const updatedRoom = this.#joinUserRoom(socket, updatedUserData, room);
+    console.log({ updatedRoom });
     socket.emit(constants.event.USER_CONNECTED, updatedUserData);
+  }
+
+  #joinUserRoom(socket, user, room) {
+    const roomId = room.id;
+    const existingRoom = this.rooms.has(roomId);
+    const currentRoom = existingRoom ? this.rooms.get(roomId) : {};
+    const currentUser = new Attendee({
+      ...user,
+      roomId,
+    });
+    // definir quem é o dono da sala
+    const [owner, users] = existingRoom
+      ? [currentRoom.owner, currentRoom.users]
+      : [currentUser, new Set()];
+
+    const updatedRoom = this.#mapRoom({
+      ...currentRoom,
+      ...room,
+      owner,
+      users: new Set([...users, ...[currentUser]]),
+    });
+
+    this.rooms.set(roomId, updatedRoom);
+
+    socket.join(roomId);
+
+    return this.rooms.get(roomId);
+  }
+
+  #mapRoom(room) {
+    const users = [...room.users.values()];
+    const speakersCount = users.filter((user) => user.isSpeaker).length;
+    const featuredAttendees = users.slice(0, 3);
+    const mappedRoom = new Room({
+      ...room,
+      featuredAttendees,
+      speakersCount,
+      attendeesCount: room.users.size,
+    });
+
+    return mappedRoom;
   }
 
   #updateGlobalUserData(userId, userData = {}, roomId = "") {

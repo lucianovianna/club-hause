@@ -56,7 +56,11 @@ export default class RoomsController {
     this.rooms.set(roomId, room);
 
     // notifica a sala que o usuario se desconectou
-    socket.to(roomId).emit(constants.event.USER_DISCONNECTED, user);    
+    socket.to(roomId).emit(constants.event.USER_DISCONNECTED, user);
+  }
+
+  #notifyUserProfileUpgrade(socket, roomId, user) {
+    socket.to(roomId).emit(constants.event.UPGRADE_USER_PERMISSION, user);
   }
 
   #getNewRoomOwner(room, socket) {
@@ -75,6 +79,8 @@ export default class RoomsController {
     });
 
     this.#users.set(newOwner.id, updatedUser);
+
+    this.#notifyUserProfileUpgrade(socket, room.id, newOwner);
 
     return newOwner;
   }

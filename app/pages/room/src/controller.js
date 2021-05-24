@@ -1,4 +1,5 @@
 import { constants } from "../../_shared/constants.js";
+import Attendee from "./entities/attendee.js";
 
 export default class RoomController {
   constructor({ roomInfo, socketBuilder, view }) {
@@ -43,6 +44,13 @@ export default class RoomController {
   }
 
   onUserConnected() {
-    return (user) => console.log("user connected: ", user);
+    return (data) => {
+      const attendee = new Attendee(data);
+      // Gasto extra de memoria, porém importante para o uso do intellisense do vscode
+      
+      console.log("user connected: ", attendee);
+
+      this.view.addAttendeeOnGrid(attendee);
+    };
   }
 }

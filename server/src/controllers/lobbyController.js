@@ -1,3 +1,5 @@
+import { constants } from "../util/constants.js";
+
 export default class LobbyController {
   constructor({ activeRooms, roomsListener }) {
     this.activeRooms = activeRooms;
@@ -5,8 +7,14 @@ export default class LobbyController {
   }
 
   onNewConnection(socket) {
-    const {id } = socket;
+    const { id } = socket;
     console.log("lobby connection stablish with ", id);
+
+    this.#updateLobbyRooms(socket, [...this.activeRooms.values()]);
+  }
+
+  #updateLobbyRooms(socket, activeRooms) {
+    socket.emit(constants.event.LOBBY_UPDATED, activeRooms);
   }
 
   getEvents() {

@@ -6,7 +6,7 @@ export default class LobbyController {
     this.socket = {};
   }
 
-  static async initialize(deps) {
+  static initialize(deps) {
     return new LobbyController(deps)._init;
   }
 
@@ -15,13 +15,14 @@ export default class LobbyController {
   }
 
   _setupSocket() {
-      this.socketBuilder
-        .setOnLobbyUpdated(this.onLobbyUpdated());
+    return this.socketBuilder
+        .setOnLobbyUpdated(this.onLobbyUpdated())
+        .build();
   }
 
-    onLobbyUpdated() {
-        return (rooms) => { 
-            console.log("rooms: ", rooms);
-        };
-    }
+  onLobbyUpdated() {
+    return (rooms) => {
+      console.log("rooms: ", rooms);
+    };
+  }
 }

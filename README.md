@@ -17,8 +17,8 @@ Projeto baseado na SemanaJSExpert 4.0 https://github.com/ErickWendel/semana-java
   - [ ] Pode acessar salas ativas
 - Room
   - [ ] Se não houver dados do usuario em localStorage deve voltar para login
-  - [ ] Cria uma sala com um usuário dono
-  - [ ] Todos usuários futuros entram com perfil de attendees
+  - [x] Cria uma sala com um usuário dono
+  - [x] Todos usuários futuros entram com perfil de attendees
   - [ ] Notifica Lobby sobre atualizações na sala
   - [ ] Lista usuarios com perfis de speakers e attendees
   - [ ] Se o dono da sala desconectar, será removida

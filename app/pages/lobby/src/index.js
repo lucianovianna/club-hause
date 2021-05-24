@@ -1,6 +1,7 @@
 import { constants } from "../../_shared/constants.js";
 import LobbyController from "./controller.js";
 import LobbySocketBuilder from "./util/lobbySocketBuilder.js";
+import View from "./view.js";
 
 const user = {
   img: "https://cdn4.iconfinder.com/data/icons/smileys-for-fun/128/smiley__9-256.png",
@@ -14,7 +15,8 @@ const socketBuilder = new LobbySocketBuilder({
 
 const dependencies = {
     socketBuilder,
-    user
+    user,
+    view: View
 }
 
 await LobbyController.initialize(dependencies);

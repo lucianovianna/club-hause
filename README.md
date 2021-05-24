@@ -10,7 +10,7 @@ Projeto baseado na SemanaJSExpert 4.0 https://github.com/ErickWendel/semana-java
 
 - Lobby
   - [ ] Se não houver dados do usuario em localStorage deve voltar para login
-  - [ ] Mostra todas as salas ativas
+  - [x] Mostra todas as salas ativas
   - [ ] Atualiza salas em realtime
   - [ ] Pode criar uma sala sem topico
   - [ ] Pode criar uma sala com topico

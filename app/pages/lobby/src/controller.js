@@ -1,7 +1,8 @@
 export default class LobbyController {
-  constructor({ socketBuilder, user }) {
+  constructor({ socketBuilder, user, view }) {
     this.socketBuilder = socketBuilder;
     this.user = user;
+    this.view = view;
 
     this.socket = {};
   }
@@ -23,6 +24,8 @@ export default class LobbyController {
   onLobbyUpdated() {
     return (rooms) => {
       console.log("rooms: ", rooms);
+
+      this.view.updateRoomList(rooms);
     };
   }
 }

@@ -10,7 +10,7 @@ const room = {
 
 const user = {
   img: "https://cdn4.iconfinder.com/data/icons/smileys-for-fun/128/smiley__9-256.png",
-  username: "lucianovianna" + Math.random(),
+  username: "lucianovianna " + Date.now(),
 };
 
 const roomInfo = { user, room };

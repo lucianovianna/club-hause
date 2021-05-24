@@ -17,7 +17,18 @@ export default class View {
   }
 
   static updateAttendeesOnGrid(users) {
-    users.forEach(item => View.addAttendeeOnGrid(item))
+    users.forEach((item) => View.addAttendeeOnGrid(item));
+  }
+
+  static _getExistingItemOnGrid({ id, baseElement = document }) {
+    const existingItem = baseElement.querySelector(`[id="${id}"]`);
+    return existingItem;
+  }
+
+  static removeItemFromGrid(id) {
+    const existingElement = View._getExistingItemOnGrid({id});
+
+    existingElement?.remove();
   }
 
   static addAttendeeOnGrid(item) {

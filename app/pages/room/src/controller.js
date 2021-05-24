@@ -44,7 +44,13 @@ export default class RoomController {
   }
 
   onDisconnected() {
-    return (user) => console.log("user disconnected: ", user);
+    return (data) => {
+      const attendee = new Attendee(data);
+
+      console.log(`${attendee.username} disconnected.`);
+      
+      this.view.removeItemFromGrid(attendee.id);
+    };
   }
 
   onUserConnected() {

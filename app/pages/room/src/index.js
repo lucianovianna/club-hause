@@ -5,7 +5,7 @@ import View from "./view.js";
 
 const room = {
   id: "0001",
-  top: "JS Expert",
+  topic: "JS Expertos",
 };
 
 const user = {

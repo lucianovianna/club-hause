@@ -2,15 +2,24 @@ import RoomsController from "./controllers/roomsControllers.js";
 import SocketServer from "./util/socket.js";
 import Event from "events";
 import { constants } from "./util/constants.js";
+import LobbyController from "./controllers/lobbyControllers.js";
 
 const port = process.env.PORT || 3000;
 const socketServer = new SocketServer({ port });
 const server = await socketServer.start();
 
+const roomsPubSub = new Event();
+
 const roomsController = new RoomsController();
+const lobbyController = new LobbyController({
+  activeRooms: roomsController.rooms,
+  roomsListener: roomsPubSub 
+});
 
 const namespaces = {
   room: { controller: roomsController, eventEmitter: new Event() },
+  lobby: { controller: lobbyController, eventEmitter: roomsPubSub },
+
 };
 
 const routeConfig = Object.entries(namespaces).map(
@@ -28,12 +37,5 @@ const routeConfig = Object.entries(namespaces).map(
 );
 
 socketServer.attachEvents({ routeConfig });
-
-// namespaces.room.eventEmitter.on(
-//   "userConnected",
-//   namespaces.room.controller.onNewConnection.bind(namespaces.room.controller)
-// );
-
-// namespaces.room.eventEmitter.emit("userConnected", {id: "UIDTESTE"});
 
 console.log("Socket server is running at port", server.address().port);

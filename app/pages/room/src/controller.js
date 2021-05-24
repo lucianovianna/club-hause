@@ -36,7 +36,11 @@ export default class RoomController {
   }
 
   onRoomUpdated() {
-    return (room) => console.log("room list:", room);
+    return (room) => {
+      this.view.updateAttendeesOnGrid(room);
+
+      console.log("room list:", room);
+    };
   }
 
   onDisconnected() {
@@ -47,7 +51,7 @@ export default class RoomController {
     return (data) => {
       const attendee = new Attendee(data);
       // Gasto extra de memoria, porém importante para o uso do intellisense do vscode
-      
+
       console.log("user connected: ", attendee);
 
       this.view.addAttendeeOnGrid(attendee);

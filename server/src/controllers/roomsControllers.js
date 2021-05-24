@@ -15,6 +15,70 @@ export default class RoomsController {
     this.#updateGlobalUserData(id);
   }
 
+  disconnect(socket) {
+    console.log("disconnected: ", socket.id);
+    this.#logoutUser(socket);
+  }
+
+  #logoutUser(socket) {
+    const userId = socket.id;
+    const user = this.#users.get(userId);
+    const roomId = user.roomId;
+
+    // remover user da lista de usuarios ativas;
+    this.#users.delete(userId);
+
+    // caso seja um usuario que estava em uma sala q n existe mais
+    if (!this.rooms.has(roomId)) {
+      return;
+    }
+
+    const room = this.rooms.get(roomId);
+    const toBeRemoved = [...room.users].find(({ id }) => id === userId);
+    // remover usuario da sala
+    room.users.delete(toBeRemoved);
+
+    // se nao houver mais usuarios na sala, removemos ela
+    if (!room.users.size) {
+      this.rooms.delete(roomId);
+      return;
+    }
+
+    const disconnectedUserWasAnOwner = userId === room.owner.id;
+    const onlyOneUserLeft = room.users.size.size === 1;
+
+    //validar se tem somente um usuario ou se ele era o dono da sala
+    if (onlyOneUserLeft || disconnectedUserWasAnOwner) {
+      room.owner = this.#getNewRoomOwner(room, socket);
+    }
+
+    // atualiza a room no final
+    this.rooms.set(roomId, room);
+
+    // notifica a sala que o usuario se desconectou
+    socket.to(roomId).emit(constants.event.USER_DISCONNECTED, user);    
+  }
+
+  #getNewRoomOwner(room, socket) {
+    const users = [...room.users.values()];
+    const activeSpeakers = users.find((user) => user.isSpeaker);
+
+    // se quem desconectou era o dono, passa a liderança para o proximo
+    // se nao houver speakers, ele pega o attendee mais antigo
+    const [newOwner] = activeSpeakers ? [activeSpeakers] : users;
+    newOwner.isSpeaker = true;
+
+    const outdatedUser = this.#users.get(newOwner.id);
+    const updatedUser = new Attendee({
+      ...outdatedUser,
+      ...newOwner,
+    });
+
+    this.#users.set(newOwner.id, updatedUser);
+
+    return newOwner;
+  }
+
   joinRoom(socket, { user, room }) {
     const userId = (user.id = socket.id);
     const roomId = room.id;

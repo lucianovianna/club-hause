@@ -12,13 +12,17 @@ export default class LobbyController {
   }
 
   async _init() {
+    this._setupViewEvents();
     this.socket = this._setupSocket();
   }
 
+  _setupViewEvents() {
+    this.view.updateUserImage(this.user);
+    this.view.configureCreateRoomButton();
+  }
+
   _setupSocket() {
-    return this.socketBuilder
-        .setOnLobbyUpdated(this.onLobbyUpdated())
-        .build();
+    return this.socketBuilder.setOnLobbyUpdated(this.onLobbyUpdated()).build();
   }
 
   onLobbyUpdated() {

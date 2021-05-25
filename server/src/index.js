@@ -13,13 +13,12 @@ const roomsPubSub = new Event();
 const roomsController = new RoomsController();
 const lobbyController = new LobbyController({
   activeRooms: roomsController.rooms,
-  roomsListener: roomsPubSub 
+  roomsListener: roomsPubSub,
 });
 
 const namespaces = {
   room: { controller: roomsController, eventEmitter: new Event() },
   lobby: { controller: lobbyController, eventEmitter: roomsPubSub },
-
 };
 
 const routeConfig = Object.entries(namespaces).map(

@@ -2,11 +2,12 @@ import Room from "./entities/room.js";
 import getTemplate from "./templates/lobbyItem.js";
 
 const roomGrid = document.getElementById("roomGrid");
-const btnCreateRoomWithoutTopic = document.getElementById(
-  "btnCreateRoomWithoutTopic"
-);
+
 const btnCreateRoomWithTopic = document.getElementById(
   "btnCreateRoomWithTopic"
+);
+const btnCreateRoomWithoutTopic = document.getElementById(
+  "btnCreateRoomWithoutTopic"
 );
 const txtTopic = document.getElementById("txtTopic");
 
@@ -14,15 +15,13 @@ export default class View {
   static clearRoomList() {
     roomGrid.innerHTML = "";
   }
-
   static generateRoomLink({ id, topic }) {
     return `./../room/index.html?id=${id}&topic=${topic}`;
   }
 
   static redirectToRoom(topic = "") {
     const id =
-      Data.now().toString(36) + Math.random().toString(36).substring(2);
-
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
     window.location = View.generateRoomLink({
       id,
       topic,
@@ -38,7 +37,6 @@ export default class View {
       View.redirectToRoom(topic);
     });
   }
-
   static updateRoomList(rooms) {
     View.clearRoomList();
 
@@ -47,7 +45,6 @@ export default class View {
         ...room,
         roomLink: View.generateRoomLink(room),
       });
-
       const htmlTemplate = getTemplate(params);
 
       roomGrid.innerHTML += htmlTemplate;
@@ -56,6 +53,6 @@ export default class View {
 
   static updateUserImage({ img, username }) {
     imgUser.src = img;
-    imgUser.alt = username;
+    imgUser.al = username;
   }
 }

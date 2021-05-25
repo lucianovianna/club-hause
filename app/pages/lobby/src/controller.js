@@ -8,7 +8,7 @@ export default class LobbyController {
   }
 
   static initialize(deps) {
-    return new LobbyController(deps)._init;
+    return new LobbyController(deps)._init();
   }
 
   async _init() {
@@ -20,15 +20,13 @@ export default class LobbyController {
     this.view.updateUserImage(this.user);
     this.view.configureCreateRoomButton();
   }
-
   _setupSocket() {
     return this.socketBuilder.setOnLobbyUpdated(this.onLobbyUpdated()).build();
   }
 
   onLobbyUpdated() {
     return (rooms) => {
-      console.log("rooms: ", rooms);
-
+      console.log("rooms", rooms);
       this.view.updateRoomList(rooms);
     };
   }
